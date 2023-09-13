@@ -7,7 +7,8 @@ load_dotenv()
 TOKEN = getenv("TOKEN")
 VERIFY_CHANNEL_TOKEN = int(environ["VERIFY_CHANNEL"])
 WELCOME_CHANNEL_TOKEN = int(environ["WELCOME_CHANNEL"])
-VERIFY_MESSAGE_ID = None
+VERIFY_TICKET_CHANNEL = int(environ["VERIFY_TICKET_CHANNEL"])
+VERIFIED_ROLE_ID = int(environ["VERIFIED_ROLE_ID"])
 
 # Directories
 BASE_DIR = Path(__file__).parent

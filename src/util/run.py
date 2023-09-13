@@ -2,6 +2,7 @@ import discord
 import random
 from src import settings
 from src.util.load_cogs import load_cogs
+from src.verification import verify
 from discord.ext import commands
 
 
@@ -14,6 +15,7 @@ def run():
     async def on_ready():
         print(f"User: {bot.user} (ID: {bot.user.id})")
         await load_cogs(bot)
+        await verify.interactive_verification_message(bot)
 
     @bot.event
     async def on_member_join(member):
