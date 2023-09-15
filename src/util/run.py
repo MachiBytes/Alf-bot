@@ -22,6 +22,6 @@ def run():
         welcome_channel = bot.get_channel(settings.WELCOME_CHANNEL_TOKEN)
         custom_messages = settings.CUSTOM_MESSAGES
 
-        await welcome_channel.send(random.choice(custom_messages))
+        await welcome_channel.send(random.choice(custom_messages).replace("{MEMBER}", member.mention))
 
     bot.run(settings.TOKEN)
