@@ -1,21 +1,16 @@
-import boto3
-
-session = boto3.Session(profile_name="awscc-admin", region_name="ap-southeast-1")
-dynamodb = session.client("dynamodb")
+import requests
 
 
 def get_id(gmail):
-    response = dynamodb.query(
-        TableName="awscc_members",
-        IndexName="email-index",
-        KeyConditionExpression='email = :val',
-        ExpressionAttributeValues={
-            ':val': {'S': gmail}
-        }
-    )
-    if not response["Items"]:
-        return "Email isn't connected to any record in the database. Please try again."
-    return response["Items"][0]["clubId"]["S"]
+    api = f"https://fe80kk63kd.execute-api.ap-southeast-1.amazonaws.com/get_id/{gmail}"
+    request = requests.get(url=api)
+    data = request.json()["member"]
+
+    if data == "None":
+        return "Club ID not found. The provided email address is not registered in the database. Please try again.\nContact aki_9716 if problem persists."
+
+    return data
+
 
 
 if __name__ == "__main__":
