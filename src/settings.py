@@ -1,3 +1,5 @@
+import logging
+from logging.config import dictConfig
 from os import getenv, environ
 from pathlib import Path
 from dotenv import load_dotenv
@@ -9,6 +11,52 @@ VERIFY_CHANNEL_TOKEN = int(environ["VERIFY_CHANNEL"])
 WELCOME_CHANNEL_TOKEN = int(environ["WELCOME_CHANNEL"])
 VERIFY_TICKET_CHANNEL = int(environ["VERIFY_TICKET_CHANNEL"])
 VERIFIED_ROLE_ID = int(environ["VERIFIED_ROLE_ID"])
+
+# Logging
+LOGGING_CONFIG = {
+    "version": 1,
+    "disabled_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)-10s - %(asctime)s - %(module)-15s : %(message)s"
+        },
+        "standard": {
+            "format": "%(levelname)-10s - %(name)-15s : %(message)s"
+        }
+    },
+    "handlers": {
+        "console1": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "standard"
+        },
+        "console2": {
+            "level": "WARNING",
+            "class": "logging.StreamHandler",
+            "formatter": "standard"
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "logs/infos.log",
+            "mode": "w",
+            "formatter": "verbose"
+        }
+    },
+    "loggers": {
+        "bot": {
+            "handlers": ["console1"],
+            "level": "INFO",
+            "propagate": False
+        },
+        "discord": {
+            "handlers": ["console2", "file"],
+            "level": "INFO",
+            "propagate": False
+        }
+    }
+}
+dictConfig(LOGGING_CONFIG)
 
 # Directories
 BASE_DIR = Path(__file__).parent

@@ -5,6 +5,7 @@ from src.util.load_cogs import load_cogs
 from src.verification import verify
 from discord.ext import commands
 
+logger = settings.logging.getLogger("bot")
 
 def run():
     intents = discord.Intents.all()
@@ -13,7 +14,7 @@ def run():
 
     @bot.event
     async def on_ready():
-        print(f"User: {bot.user} (ID: {bot.user.id})")
+        logger.info(f"User: {bot.user} (ID: {bot.user.id})")
         await load_cogs(bot)
         await verify.interactive_verification_message(bot)
 
@@ -24,4 +25,4 @@ def run():
 
         await welcome_channel.send(random.choice(custom_messages).replace("{MEMBER}", member.mention))
 
-    bot.run(settings.TOKEN)
+    bot.run(settings.TOKEN, root_logger=True)
