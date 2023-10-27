@@ -1,4 +1,3 @@
-import logging
 from logging.config import dictConfig
 from os import getenv, environ
 from pathlib import Path
@@ -61,10 +60,6 @@ dictConfig(LOGGING_CONFIG)
 # Directories
 BASE_DIR = Path(__file__).parent
 COGS_DIR = BASE_DIR / "cogs"
-
-# Config
-AWS_PROFILE = environ["AWS_PROFILE"]
-AWS_REGION = environ["AWS_REGION"]
 
 # Variables
 CUSTOM_MESSAGES = [
