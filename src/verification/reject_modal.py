@@ -1,5 +1,6 @@
 import discord
 from discord.ui import Modal, TextInput
+from src.database import tickets_json
 
 class RejectModal(Modal, title="Verification request rejected."):
     reason = TextInput(
@@ -22,6 +23,7 @@ class RejectModal(Modal, title="Verification request rejected."):
 
         # End interaction
         await interaction.response.send_message(content="Verification rejected...", ephemeral=True, delete_after=0.1)
+        tickets_json.remove_ticket(interaction.message.id)
         await interaction.message.delete()
     
     async def on_error(self, interaction, error) -> None:

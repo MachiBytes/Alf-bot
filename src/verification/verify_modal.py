@@ -1,7 +1,8 @@
 import discord
-from discord.ui import Modal, TextInput, View, Button
+from discord.ui import Modal, TextInput, Button
 from src import settings
-from src.verification import reject_modal
+from src.classes import views
+from src.database import tickets_json
 
 
 class VerifyModal(Modal, title="Fill in the details to get verified"):
@@ -44,31 +45,13 @@ class VerifyModal(Modal, title="Fill in the details to get verified"):
         # Send a ticket to the ticket channel
         ticket_channel = self.bot.get_channel(settings.VERIFY_TICKET_CHANNEL)
 
-        # Callbacks
-        async def accept(interaction):
-            # Add user's discord ID to the database (not yet implemented)
-            guild = interaction.guild
-            verified_role = guild.get_role(settings.VERIFIED_ROLE_ID)
-            await user.add_roles(verified_role)
-
-            embed = discord.Embed(title="Verification request", description="Congratulations! Your verification request has been accepted. We officially welcome you onboard the AWSCC Discord Server!")
-            await user.send(embed=embed)
-            await ticket_message.delete()
-
-        async def reject(interaction):
-            reject = reject_modal.RejectModal(user)
-            await interaction.response.send_modal(reject)
-
-        accept_button = Button(label="Accept", style=discord.ButtonStyle.green)
-        accept_button.callback = accept
-        reject_button = Button(label="Reject", style=discord.ButtonStyle.red)
-        reject_button.callback = reject
-
-        view = View(timeout=None)
-        view.add_item(accept_button)
-        view.add_item(reject_button)
+        # Ticket View
+        view = views.TicketView(self.bot)
 
         ticket_message = await ticket_channel.send(embed=embed, view=view)
+
+        # Save the message_id and user_id
+        tickets_json.add_ticket(ticket_message.id, user.id)
 
         # End the interaction
         await interaction.response.send_message(content="Verification is being processed...", ephemeral=True, delete_after=3)
