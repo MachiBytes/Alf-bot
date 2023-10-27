@@ -4,8 +4,9 @@ from src.classes import views
 from src import settings
 from src.util.load_cogs import load_cogs
 import random
+import logging
 
-logger = settings.logging.getLogger("bot")
+logger = logging.getLogger("bot")
 
 
 class PersistentViewBot(commands.Bot):
